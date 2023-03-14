@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>anybin</title>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <div id="header"></div>
+        <div id="body"></div>
+
+        <!-- <script src="./js/header.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            let selfID = null;
+            function on_login(){
+                if (localStorage.getItem("ANYBIN_ID") == null){
+                    let new_id = makeid(24); // make random 24 char string
+                    localStorage.setItem("ANYBIN_ID", new_id)
+                    selfID = localStorage.getItem("ANYBIN_ID");
+                }
+                else{
+                    selfID = localStorage.getItem("ANYBIN_ID");
+                }
+            }
+            function makeid(n) {
+                var result           = '';
+                var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                var charactersLength = characters.length;
+                for ( var i = 0; i < n; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+                return result;
+            }
+
+            // GET requests
+            async function get_user(userid){
+                $.ajax({
+                    type: 'GET',
+                    url: '/user',
+                    data: {userid: userid},
+                    success: function(response) { 
+                        console.log(response);
+                    },
+                    error: function(xhr, status, err) {
+                        console.error('DATA: XHR Error.');
+                    }
+                });
+            }
+            async function get_bin(){
+                $.ajax({
+                    type: 'GET',
+                    url: '/bin',
+                    data: {userid: selfID, binid: binID},
+                    success: function(response) { 
+                        console.log(response);
+                    },
+                    error: function(xhr, status, err) {
+                        console.error('DATA: XHR Error.');
+                    }
+                });
+            }
+            async function get_item(){
+                $.ajax({
+                    type: 'GET',
+                    url: '/bin',
+                    data: {userid: selfID, binid: binID, itemid: itemID},
+                    success: function(response) { 
+                        console.log(response);
+                    },
+                    error: function(xhr, status, err) {
+                        console.error('DATA: XHR Error.');
+                    }
+                });
+            }
+
+            // PUT requests
+            async function post_user(userid, value){
+                $.ajax({
+                    type: 'POST',
+                    url: '/user',
+                    data: {
+                        value: 'dingdong'
+                    },
+                    dataType: 'json',
+                    success: function(response) { 
+                        console.log(response);
+                    },
+                    error: function(xhr, status, err) {
+                        console.error('DATA: XHR Error.');
+                    }
+                });
+            }
+
+
+
+            $(document).ready(function() { 
+                $.ajaxSetup({cache: false});
+                on_login();
+            });
+        </script>
+    </body>
+</html>
