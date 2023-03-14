@@ -5,15 +5,69 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>anybin</title>
-        <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
-        <div id="header"></div>
-        <div id="body"></div>
+        <h1>Dashboard</h1>
+        <p1 id="username"></p1>
+        <br>
+        <a href="/logout">logout</a>
+        <br>
+        <form>
+            <input type="file" id="image" name="image">
+            <button type="submit" id="submit-btn">Upload Image</button>
+        </form>
+
+        <ol>
+            <li><a href="#">Nothing here... Create a bin!</a></li>
+        </ol>
+        
 
         <!-- <script src="./js/header.js"></script> -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
         <script>
+            const form = document.querySelector('form');
+            const submitBtn = document.querySelector('#submit-btn');
+
+            submitBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const formData = new FormData();
+            const imageFile = document.querySelector('#image').files[0];
+
+            formData.append('image', imageFile);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/image', true);
+
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    console.info('UPLOAD STATUS: ', this.statusText);
+                    console.info("UPLOADED: " + this.responseText);
+                } else {
+                    console.info('UPLOAD STATUS: ', this.statusText);
+                }
+            };
+
+            xhr.send(formData);
+            });
+
+            function getUserProfile() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/user',
+                    success: function(user) { 
+                        document.getElementById("username").innerHTML = "Logged in as <strong>" + user.name + "</strong>";
+
+                    },
+                    error: function(xhr, status, err) {
+                        console.error('DATA: XHR Error.');
+                    }
+                });
+            }
+            getUserProfile()
+        </script>
+        
+        <!-- <script>
             let selfID = null;
             function on_login(){
                 if (localStorage.getItem("ANYBIN_ID") == null){
@@ -83,7 +137,7 @@
                     userid: userid,
                     value: value
                 })
-                const url = "http://localhost:3000/api/user"
+                const url = "http://grayling.home:4320/api/user"
                 let xhr = new XMLHttpRequest()
                 xhr.open('POST', url, true)
                 xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
@@ -96,6 +150,6 @@
                 $.ajaxSetup({cache: false});
                 on_login();
             });
-        </script>
+        </script> --> -->
     </body>
 </html>
