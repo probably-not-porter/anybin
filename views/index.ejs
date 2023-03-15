@@ -39,7 +39,7 @@
             async function get_user(userid){
                 $.ajax({
                     type: 'GET',
-                    url: '/user',
+                    url: '/api/user',
                     data: {userid: userid},
                     success: function(response) { 
                         console.log(response);
@@ -48,11 +48,12 @@
                         console.error('DATA: XHR Error.');
                     }
                 });
+                
             }
             async function get_bin(){
                 $.ajax({
                     type: 'GET',
-                    url: '/bin',
+                    url: '/api/bin',
                     data: {userid: selfID, binid: binID},
                     success: function(response) { 
                         console.log(response);
@@ -65,7 +66,7 @@
             async function get_item(){
                 $.ajax({
                     type: 'GET',
-                    url: '/bin',
+                    url: '/api/item',
                     data: {userid: selfID, binid: binID, itemid: itemID},
                     success: function(response) { 
                         console.log(response);
@@ -78,20 +79,15 @@
 
             // PUT requests
             async function post_user(userid, value){
-                $.ajax({
-                    type: 'POST',
-                    url: '/user',
-                    data: {
-                        value: 'dingdong'
-                    },
-                    dataType: 'json',
-                    success: function(response) { 
-                        console.log(response);
-                    },
-                    error: function(xhr, status, err) {
-                        console.error('DATA: XHR Error.');
-                    }
-                });
+                let post = JSON.stringify({
+                    userid: userid,
+                    value: value
+                })
+                const url = "http://localhost:3000/api/user"
+                let xhr = new XMLHttpRequest()
+                xhr.open('POST', url, true)
+                xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
+                xhr.send(post);
             }
 
 
