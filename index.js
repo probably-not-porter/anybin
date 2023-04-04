@@ -1,31 +1,29 @@
 // ==============
 // |   ANYBIN   |          Created by Porter
-// ==============          March 2023                 v0.1
+// ==============          April 2023                 v0.1
 
 
 // =========== Requires =========== //
-require('dotenv').config();
-const { QuickDB } = require("quick.db");
-const express = require('express');
-const passport = require('passport');
+const { QuickDB } =   require("quick.db");
+const express =       require('express');
+const passport =      require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const session = require('express-session');
-var bodyParser = require('body-parser')
-var path = require('path');
-var favicon = require('serve-favicon');
-const multer = require('multer');
-const jsonParser = bodyParser.json()
+const session =       require('express-session');
+const bodyParser =    require('body-parser');
+const path =          require('path');
+const favicon =       require('serve-favicon');
+const multer =        require('multer');
 
 
 // =========== Express App =========== //
+require('dotenv').config();
 const e_app = express();
-
 e_app.set('view engine', 'ejs');
 e_app.get('/dashboardhack', function(_req, res) {
     res.render("dashboard",{
     })
 });
-
+e_app.use(favicon(path.join(__dirname, 'public', 'favicon.png')))
 e_app.use(session({
   secret: 'mysecretkey',
   resave: true,
@@ -37,6 +35,8 @@ e_app.use(passport.session());
 
 // =========== Storage and DB =========== //
 const db = new QuickDB();
+const jsonParser = bodyParser.json();
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'fileserve/')
@@ -88,6 +88,7 @@ e_app.post('/api/image', upload.single('image'), (req, res) => {
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 e_app.use(urlencodedParser);
 
+// Passport setup
 passport.use(new LocalStrategy(
   async function(username, password, done) {
     console.log("CREATING USER")
@@ -114,16 +115,15 @@ passport.use(new LocalStrategy(
     }
   }
 ));
-
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
-
 passport.deserializeUser(async function(id, done) {
   const users = await db.get("user");
   const user = Object.values(users).find(u => u.id === id);
   done(null, user);
 });
+
 // Set up routes
 e_app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
@@ -142,27 +142,13 @@ e_app.get('/logout', (req, res) => {
     res.redirect('/');
   });
 });
-
-e_app.get('/login', (req, res) => {
-  console.log("LOGIN PAGE")
-  res.render("login",{
-  })
-});
-e_app.get("/register", (req, res) => {
-  console.log("REGISTER PAGE")
-  res.render("register",{
-  })
-})
-
 e_app.post('/login', function(req, res, next) {
   console.log('REQUESTED LOGIN');
   next();
 }, passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/login'
+  failureRedirect: '/'
 }));
-
-// Register a new user
 e_app.post('/register', urlencodedParser, async function(req, res) {
   console.log("REQUESTED REGISTER")
   const username = req.body.username;
@@ -207,7 +193,7 @@ e_app.post('/register', urlencodedParser, async function(req, res) {
   console.log("REGISTERING USER")
 
   // Redirect to login page
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 // =========== Start the app =========== //
