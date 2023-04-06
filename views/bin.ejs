@@ -10,5 +10,42 @@
     <body>
         <div id="header"></div>
         <div id="body"></div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.8/lib/swappable.js"></script>
+        <script>
+            $(document).ready(function() { 
+                new Swappable.default(document.getElementById("grid-container"), {
+                    draggable: 'div'
+                }).on('swappable:start', () => console.log('swappable:start'))
+                .on('swappable:swapped', () => console.log('swappable:swapped'))
+                .on('swappable:stop', () => console.log('swappable:stop'));
+            });
+            // const form = document.querySelector('form');
+            // const submitBtn = document.querySelector('#submit-btn');
+
+            // submitBtn.addEventListener('click', (event) => {
+            // event.preventDefault();
+
+            // const formData = new FormData();
+            // const imageFile = document.querySelector('#image').files[0];
+
+            // formData.append('image', imageFile);
+
+            // const xhr = new XMLHttpRequest();
+            // xhr.open('POST', '/api/image', true);
+
+            // xhr.onload = function () {
+            //     if (this.status === 200) {
+            //         console.info('UPLOAD STATUS: ', this.statusText);
+            //         console.info("UPLOADED: " + this.responseText);
+            //     } else {
+            //         console.info('UPLOAD STATUS: ', this.statusText);
+            //     }
+            // };
+
+            // xhr.send(formData);
+            // });
+        </script>
     </body>
 </html>

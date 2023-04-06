@@ -56,28 +56,39 @@ e_app.get('/api/user', async function(req, res) {
   res.send(obj);
 });
 e_app.get('/api/bin', async function(req, res) {
-  let obj = await db.get( "bin/" + req.query.binid );
-  res.send(obj);
+  let bin = await db.get("bin." + req.query.binid);
+  res.send(bin);
 });
-e_app.get('/api/item', async function(req, res) {
-  let obj = await db.get( "item/" + req.query.itemid );
-  res.send(obj);
-});
-
-// PUTS
-e_app.post('/api/user', jsonParser, async function(req, res) {
-  await db.set("user/" + req.body.userid, req.body.value);
-  res.send("success!");
-});
+// e_app.get('/api/item', async function(req, res) {
+//   let obj = await db.get( "item/" + req.query.itemid );
+//   res.send(obj);
+// });
 
 e_app.post('/api/bin', jsonParser, async function(req, res) {
-  await db.set("bin/" + req.body.binid, req.body.value);
-  res.send("success!");
+  console.log("CREATING BIN");
+  let userbins = await db.get("user." + req.user.id + ".bins" );
+  const binid = makeid(12);
+  userbins.push(binid);
+
+  const newBin = {
+    name: "New Bin",
+    description: "Brand new bin!",
+    id: binid,
+    items: [],
+    col: 5,
+    row: 4
+  };
+  
+  await db.set("bin." + binid, newBin);
+  await db.set  ("user." + req.user.id + ".bins", userbins);
+  
+  res.send(binid);
 });
-e_app.post('/api/item', jsonParser, async function(req, res) {
-  await db.set("item/" + req.body.itemid, req.body.value);
-  res.send("success!");
-});
+// e_app.post('/api/item', jsonParser, async function(req, res) {
+//   await db.set("item/" + req.body.itemid, req.body.value);
+//   res.send("success!");
+// });
+
 e_app.post('/api/image', upload.single('image'), (req, res) => {
   res.send(req.file.filename);
 });

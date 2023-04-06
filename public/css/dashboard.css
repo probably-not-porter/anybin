@@ -1,6 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Unica+One&display=swap');
 body{
-    background-color: black;
+    background: black;
+}
+h1{
+    font-family: 'Unica One', cursive;
+    background-image:linear-gradient(0deg, rgba(60, 164, 51, 0.6) 0px, rgb(130, 255, 159) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 60px;
+    text-shadow : horizontal-shadow vertical-shadow blur color;
+    width: 100%;
+    text-align: center;
 }
 .nav-link{
     color: rgb(130, 255, 159);
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    color: #444;
+}
+
+.box {
+    color: #fff;
+    margin: 20px;
+    padding: 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    height: 15vh;
+    transition-duration: 800ms;
+    border: 2px solid rgba(0,0,0,0);
+    cursor: pointer;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.box:hover{
+    transition-duration: 100ms;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.40);
+    border: 2px solid rgba(130, 255, 159, 0.5);
+}
+.bin_name{
+    font-size: 18px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.9);
+}
+.bin_id{
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    float: right;
 }
