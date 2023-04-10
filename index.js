@@ -70,13 +70,18 @@ e_app.post('/api/bin', jsonParser, async function(req, res) {
   const binid = makeid(12);
   userbins.push(binid);
 
+  const date = new Date();
   const newBin = {
     name: "New Bin",
-    description: "Brand new bin!",
+    description: "Brand new bin! Rename this shit",
     id: binid,
     items: [],
+    tags: [],
     col: 5,
-    row: 4
+    row: 4,
+    editDates: [date],
+    editors: [req.user.id],
+    owner: req.user.id
   };
   
   await db.set("bin." + binid, newBin);
@@ -197,6 +202,7 @@ e_app.post('/register', urlencodedParser, async function(req, res) {
     name: username,
     password: password,
     bins: [],
+    favorites: [],
     id: newUserId
   };
   
@@ -207,10 +213,21 @@ e_app.post('/register', urlencodedParser, async function(req, res) {
   res.redirect('/');
 });
 
+// SUB PAGES
+e_app.get('/bin', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render("bin",{
+    })
+  } else {
+    res.redirect('/');
+  }
+  
+});
+
 // =========== Start the app =========== //
 e_app.use(express.static(__dirname + '/public'));
 e_app.use(express.static(__dirname + '/fileserve'));
-e_app.listen(process.env.PORT || 4320, function(){
+e_app.listen(process.env.PORT || 4620, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, e_app.settings.env);
 });
 

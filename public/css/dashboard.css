@@ -1,26 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Unica+One&display=swap');
-body{
-    background: black;
-}
-h1{
-    font-family: 'Unica One', cursive;
-    background-image:linear-gradient(0deg, rgba(60, 164, 51, 0.6) 0px, rgb(130, 255, 159) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 60px;
-    text-shadow : horizontal-shadow vertical-shadow blur color;
-    width: 100%;
-    text-align: center;
-}
-.nav-link{
-    color: rgb(130, 255, 159);
-}
+
+
+
 
 .wrapper {
     display: grid;
     grid-template-columns: 20% 20% 20% 20% 20%;
     color: #444;
+    width: 100%;
+    height: auto;
 }
+@media (min-width: 575.98px) { 
+    .wrapper {
+        grid-template-columns: 100%;
+    }
+ }
+
+@media (min-width: 767.98px) { 
+    .wrapper {
+        grid-template-columns: 50% 50%;
+    }
+ }
+@media (min-width: 991.98px) { 
+    .wrapper {
+        grid-template-columns: 33% 33% 33%;
+    }
+}
+@media (min-width: 1199.98px) { 
+    .wrapper {
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+ }
+@media (min-width: 1399.98px) { 
+    .wrapper {
+        grid-template-columns: 20% 20% 20% 20% 20%;
+    }
+}
+
 
 .box {
     color: #fff;
@@ -48,4 +64,7 @@ h1{
     font-size: 12px;
     color: rgba(255,255,255,0.5);
     float: right;
+}
+.glyphicon, .glyphicon a{
+    color: white;
 }

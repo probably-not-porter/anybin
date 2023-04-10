@@ -2,25 +2,10 @@
 // loads user, standard logged-in dashboard, and bins.
 
 
-// Get Logged in User information from server
-async function getUserProfile() {
-    $.ajax({ // api request using built in user data
-        type: 'GET',
-        url: '/api/user',
-        success: function(user) { 
-            document.getElementById("username").innerHTML = user.name; // user return data to modify UI
-            for (x=0;x<user.bins.length;x++){
-                get_bin(user.bins[x]); // iterate over bins and GET each one to be displayed
-            }
-        },
-        error: function(xhr, status, err) {
-            console.error('DATA: XHR Error.');
-        }
-    });
-}
+
 
 // get a single bin by id
-async function get_bin(binid){
+async function getBin(binid){
     $.ajax({
         type: 'GET',
         url: '/api/bin',
@@ -37,6 +22,8 @@ async function get_bin(binid){
             item_id.classList.add("bin_id");
             item_id.innerHTML = response.id;
             new_item.appendChild(item_id);
+
+            new_item.onclick = function() { window.location.href = "/bin?id=" + response.id; };
             
             document.getElementById("grid").appendChild(new_item); // add to grid
         },
@@ -46,7 +33,7 @@ async function get_bin(binid){
     });
 }
 // create a single bin
-async function post_bin(){
+async function postBin(){
     $.ajax({
         type: 'POST',
         url: '/api/bin',
@@ -59,9 +46,32 @@ async function post_bin(){
     });
 }
 
+// Get Logged in User information from server
+async function getUserProfile() {
+    $.ajax({ // api request using built in user data
+        type: 'GET',
+        url: '/api/user',
+        success: function(user) { 
+            document.getElementById("username").innerHTML = user.name; // user return data to modify UI
+            for (x=0;x<user.bins.length;x++){
+                getBin(user.bins[x]); // iterate over bins and GET each one to be displayed
+            }
+        },
+        error: function(xhr, status, err) {
+            console.error('DATA: XHR Error.');
+        }
+    });
+}
+
 $(document).ready(function() { 
     // Attache grid to page content
-    const c = document.getElementById("page-content")
-    c.innerHTML = `<div id='grid' class="wrapper"><div class="box"><span class="bin_name">Create New</span></div></div>`;
+    const c = document.getElementById("page-content");
+    c.innerHTML = `
+        <div id='grid' class="wrapper">
+            <div class="box" onclick='postBin()'>
+                <span class="bin_name">Create New</span>
+            </div>
+        </div>
+    `;
     getUserProfile(); // Load user profile when page loads.
 });
