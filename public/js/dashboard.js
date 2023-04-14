@@ -33,9 +33,9 @@ async function getBin(binid){
     });
 }
 // create a single bin
-async function postBin(){
+async function putBin(){
     $.ajax({
-        type: 'POST',
+        type: 'PUT',
         url: '/api/bin',
         success: function(response) { 
             console.log(response); // returns bin ID
@@ -68,7 +68,7 @@ $(document).ready(function() {
     const c = document.getElementById("page-content");
     c.innerHTML = `
         <div id='grid' class="wrapper">
-            <div class="box" onclick='postBin()'>
+            <div class="box" onclick='putBin()'>
                 <span class="bin_name">Create New</span>
             </div>
         </div>

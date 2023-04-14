@@ -59,12 +59,11 @@ e_app.get('/api/bin', async function(req, res) {
   let bin = await db.get("bin." + req.query.binid);
   res.send(bin);
 });
-// e_app.get('/api/item', async function(req, res) {
-//   let obj = await db.get( "item/" + req.query.itemid );
-//   res.send(obj);
-// });
-
 e_app.post('/api/bin', jsonParser, async function(req, res) {
+  console.log(req.body);
+});
+
+e_app.put('/api/bin', jsonParser, async function(req, res) {
   console.log("CREATING BIN");
   let userbins = await db.get("user." + req.user.id + ".bins" );
   const binid = makeid(12);
@@ -75,7 +74,7 @@ e_app.post('/api/bin', jsonParser, async function(req, res) {
     name: "New Bin",
     description: "Brand new bin! Rename this shit",
     id: binid,
-    items: [],
+    items: {}, // key is index in the bin, value is item id.
     tags: [],
     col: 5,
     row: 4,
