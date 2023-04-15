@@ -36,6 +36,8 @@ e_app.use(passport.session());
 // =========== Storage and DB =========== //
 const db = new QuickDB();
 const jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+e_app.use(urlencodedParser);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -61,6 +63,22 @@ e_app.get('/api/bin', async function(req, res) {
 });
 e_app.post('/api/bin', jsonParser, async function(req, res) {
   console.log(req.body);
+  const newBin = {
+    name: req.body.name,
+    description: req.body.description,
+    id: req.body.id,
+    items: JSON.parse(req.body.items),
+    tags: JSON.parse(req.body.tags),
+    col: req.body.col,
+    row: req.body.row,
+    editDates: JSON.parse(req.body.editDates),
+    editors: JSON.parse(req.body.editors),
+    owner: req.body.owner
+  };
+  console.log(newBin);
+
+  await db.set("bin." + req.body.id, newBin);
+  res.send("success");
 });
 
 e_app.put('/api/bin', jsonParser, async function(req, res) {
@@ -100,8 +118,7 @@ e_app.post('/api/image', upload.single('image'), (req, res) => {
 
 // =========== Auth =========== //
 
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
-e_app.use(urlencodedParser);
+
 
 // Passport setup
 passport.use(new LocalStrategy(

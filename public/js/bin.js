@@ -8,6 +8,7 @@ var MIN_COL = 2;
 
 // =============== HTML Rendering ================
 async function render(layout){
+    
     // modify page content for bin
     const c = document.getElementById("page-content");
     c.innerHTML = "";
@@ -26,7 +27,7 @@ async function render(layout){
     // ==== create top bar
     toolbar.innerHTML = `
         </div>
-            <span id="binname" class="input" role="textbox" contenteditable>${layout.name}</span>
+            <input type="text" onchange="editName(this.value)" id="binname" name="binname" value="${layout.name}">
             <span id="binid"><strong>Grid:</strong> ${layout.row} x ${layout.col}, <strong>ID:</strong> ${layout.id}</span>
             <span id="info1"><strong>Last edit:</strong> ${dateStr}</span>
             <div id=buttons>
@@ -81,9 +82,15 @@ async function render(layout){
 
     c.innerHTML +=`
         <div id='save-button' onclick="saveEdits()">
-            <i class="bi bi-device-hdd"></i> Save edits to server
+            <i class="bi bi-device-hdd"></i> <span>Save edits to server</span>
         </div>
     `;
+
+    // do this last
+    console.log(UNSAVED);
+    if (UNSAVED == true){
+        document.getElementById("save-button").style.display = "block";
+    }
 }
 // =================== EDITING FUNCTIONS =========================
 function editDim(col,row){
@@ -154,15 +161,31 @@ async function getUserProfile() {
 }
 
 async function saveEdits(){
+    const date = new Date();
+    CURRENT_BIN.editDates.push(date);
     jQuery.ajax({
         url: "/api/bin",
         type: "POST",
-        data: JSON.stringify(CURRENT_BIN),
+        data: { 
+            "name": CURRENT_BIN.name,
+            "description": CURRENT_BIN.description,
+            "id": CURRENT_BIN.id,
+            "items": JSON.stringify(CURRENT_BIN.items),
+            "tags": JSON.stringify(CURRENT_BIN.tags),
+            "col": CURRENT_BIN.col,
+            "row": CURRENT_BIN.row,
+            "editDates": JSON.stringify(CURRENT_BIN.editDates),
+            "editors": JSON.stringify(CURRENT_BIN.editors),
+            "owner": CURRENT_BIN.owner
+        },
         dataType: "json",
         success: function(result) {
             console.log(result);
+            
         }
-    });    
+    });  
+    UNSAVED = false;
+    render(CURRENT_BIN);  
 }
 
 async function getBin(binid){
