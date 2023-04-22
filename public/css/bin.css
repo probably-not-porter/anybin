@@ -51,6 +51,9 @@
     float: right;
     width: 100%;
     height: 100%;
+    grid-auto-rows: 0;
+    grid-auto-columns: 0;
+    overflow: hidden;
 }
 .box {
     color: #fff;
@@ -65,8 +68,31 @@
     cursor: pointer;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
+.empty {
+    color: rgba(255,255,255,0.5);
+    margin: 3px;
+    padding: 10px;
+    background: rgba(255,255,255,0);
+    grid-template-columns: 20%;
+    border-radius: 5px;
+    height: auto;
+    transition-duration: 800ms;
+    border: 2px solid rgba(0,0,0,0);
+    cursor: pointer;
+    text-align: center;
+    line-height: 100%;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    display:table;
+}
+.empty span{
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 5vmin;
+    
+}
 .box:hover{
     transition-duration: 100ms;
+    color: #fff;
     margin: 10px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.40);
     border: 2px solid rgba(130, 255, 159, 0.5);
@@ -113,14 +139,18 @@
     right: 50px;
     z-index: 10000;
     font-size: 20px;
-    background-color: rgba(255,255,255,0.9);
+    background-color: rgba(255,255,255,0.5);
     padding: 20px;
     border-radius: 5px;
-    border: 1px solid rgba(0,0,0,0);
+    border: 2px solid rgba(0,0,0,0);
     transition-duration: 1000ms;
     cursor: pointer;
     color: black;
     display: none;
+}
+#save-button:hover{
+    border: 2px solid rgba(130, 255, 159, 1);
+    background-color: rgba(255,255,255,0.9);
 }
 #save-button span{
     font-size: 20px;

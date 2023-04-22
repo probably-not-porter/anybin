@@ -39,6 +39,7 @@ async function putBin(){
         url: '/api/bin',
         success: function(response) { 
             console.log(response); // returns bin ID
+            getUserProfile();
         },
         error: function(xhr, status, err) {
             console.error('DATA: XHR Error.');
@@ -48,6 +49,15 @@ async function putBin(){
 
 // Get Logged in User information from server
 async function getUserProfile() {
+    const c = document.getElementById("page-content");
+    c.innerHTML = `
+        <div id='grid' class="wrapper">
+            <div class="box" onclick='putBin()'>
+                <span class="bin_name">Create New</span>
+            </div>
+        </div>
+    `;
+
     $.ajax({ // api request using built in user data
         type: 'GET',
         url: '/api/user',
@@ -64,14 +74,5 @@ async function getUserProfile() {
 }
 
 $(document).ready(function() { 
-    // Attache grid to page content
-    const c = document.getElementById("page-content");
-    c.innerHTML = `
-        <div id='grid' class="wrapper">
-            <div class="box" onclick='putBin()'>
-                <span class="bin_name">Create New</span>
-            </div>
-        </div>
-    `;
     getUserProfile(); // Load user profile when page loads.
 });

@@ -1,4 +1,5 @@
 var CURRENT_BIN = null;
+var CURRENT_PAGE = 0;
 var UNSAVED = false;
 
 var MAX_ROW = 7;
@@ -60,12 +61,54 @@ async function render(layout){
     <div id="gridPos">
         <div id='grid' style="grid-template-columns: ${gridCol.join(" ")}; grid-template-rows: ${gridRow.join(" ")};"class="wrapper">
     `;
-    for (x=0;x< layout.col * layout.row; x++){
-        g_elem += `
-            <div class="box">
-                <span class="bin_name">${x}</span>
-            </div>
-        `;
+
+    let page = layout.items[CURRENT_PAGE];
+    
+    for (row=1; row <= layout.row; row++){
+        for (col=1; col <= layout.col; col++){
+        
+            console.log(`CREATE GRID ITEM col:${col}, row:${row}`);
+            let current_item = null;
+            
+            for (j=0; j < page.length; j++){
+                if (page[j].y == row && page[j].x == col){
+                    current_item = page[j];
+
+                }
+            }
+            if (current_item){
+                console.log("CREATE PREEXISTING ITEM");
+                g_elem += `
+                <div class="box" style='grid-row: ${current_item.y}/${current_item.y + current_item.height}; grid-column: ${current_item.x}/${current_item.x + current_item.width};'>
+                    <span class="bin_name">${current_item.id}</span>
+                </div>
+                `;
+            } 
+            else{
+                let blocked = false;
+                for (j=0; j < page.length; j++){
+                    console.log(page[j].y,page[j].y + page[j].height);
+                    console.log(page[j].x,page[j].x + page[j].width);
+                    if (page[j].y <= row && page[j].y + page[j].height > row &&
+                        page[j].x <= col && page[j].x + page[j].width > col){
+                            blocked = true;
+                            console.log('blocked square')
+    
+                    }
+                }
+
+                if (!blocked){
+                    console.log("CREATE EMPTY ITEM");
+                    g_elem += `
+                    <div class="box empty">
+                        <span onclick="createItem(${row},${col})" class="bin_name">+</span>
+                    </div>
+                    `;
+                }
+            }
+
+        
+        }
     }
     g_elem += "</div></div>";
     c.innerHTML += g_elem;
@@ -93,6 +136,7 @@ async function render(layout){
     }
 }
 // =================== EDITING FUNCTIONS =========================
+
 function editDim(col,row){
     console.log("local edit bin dims to " + col + ',' + row);
     CURRENT_BIN.col = col;
@@ -159,7 +203,26 @@ async function getUserProfile() {
         }
     });
 }
-
+async function createItem(row, col){
+    console.log(`create bin ${row}, ${col}`)
+    saveEdits()
+    jQuery.ajax({
+        url: "/api/item",
+        type: "PUT",
+        data: { 
+            "binid": CURRENT_BIN.id,
+            "row": col,
+            "col": row,
+            "page": CURRENT_PAGE
+        },
+        dataType: "json",
+        success: function(result) {
+            console.log(result);
+            getBin(CURRENT_BIN.id)
+            
+        }
+    });
+}
 async function saveEdits(){
     const date = new Date();
     CURRENT_BIN.editDates.push(date);

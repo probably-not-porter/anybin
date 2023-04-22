@@ -14,7 +14,18 @@ Name
 ID
 col
 row
-Items
+Items = [
+    [
+        {
+            id: dsajkdjaskd,
+            width: 2,
+            height: 1,
+            x: 0,
+            y: 0
+        }
+    ] //page 1
+    [] //page 2
+]
 Tags
 CreatorID
 EditorIDs

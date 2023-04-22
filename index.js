@@ -62,7 +62,6 @@ e_app.get('/api/bin', async function(req, res) {
   res.send(bin);
 });
 e_app.post('/api/bin', jsonParser, async function(req, res) {
-  console.log(req.body);
   const newBin = {
     name: req.body.name,
     description: req.body.description,
@@ -75,14 +74,13 @@ e_app.post('/api/bin', jsonParser, async function(req, res) {
     editors: JSON.parse(req.body.editors),
     owner: req.body.owner
   };
-  console.log(newBin);
 
   await db.set("bin." + req.body.id, newBin);
   res.send("success");
 });
 
 e_app.put('/api/bin', jsonParser, async function(req, res) {
-  console.log("CREATING BIN");
+  console.info("CREATING BIN");
   let userbins = await db.get("user." + req.user.id + ".bins" );
   const binid = makeid(12);
   userbins.push(binid);
@@ -92,7 +90,9 @@ e_app.put('/api/bin', jsonParser, async function(req, res) {
     name: "New Bin",
     description: "Brand new bin! Rename this shit",
     id: binid,
-    items: {}, // key is index in the bin, value is item id.
+    items: [
+      [] // page 1
+    ], // key is index in the bin, value is item id.
     tags: [],
     col: 5,
     row: 4,
@@ -106,10 +106,29 @@ e_app.put('/api/bin', jsonParser, async function(req, res) {
   
   res.send(binid);
 });
-// e_app.post('/api/item', jsonParser, async function(req, res) {
-//   await db.set("item/" + req.body.itemid, req.body.value);
-//   res.send("success!");
-// });
+
+e_app.put('/api/item', jsonParser, async function(req, res) {
+  console.info("CREATE ITEM");
+  let binPage = await db.get(`bin.${req.body.binid}.items.${req.body.page}`);
+  let itemId = makeid(14);
+  binPage.push({
+    id: itemId,
+    x: parseInt(req.body.row),
+    y: parseInt(req.body.col),
+    height: 1,
+    width: 1
+  })
+  const newItem = {
+    name: "New Item",
+    id: itemId,
+    description: "Sample Description",
+    links: [],
+    images: []
+  }
+  await db.set(`bin.${req.body.binid}.items.${req.body.page}`, binPage);
+  await db.set(`item.${itemId}`, newItem);
+  res.send(newItem);
+});
 
 e_app.post('/api/image', upload.single('image'), (req, res) => {
   res.send(req.file.filename);
@@ -123,7 +142,7 @@ e_app.post('/api/image', upload.single('image'), (req, res) => {
 // Passport setup
 passport.use(new LocalStrategy(
   async function(username, password, done) {
-    console.log("CREATING USER")
+    console.info("CREATING USER " + username);
     // Check if user exists in database
     const userId = await db.has("user.default");
     if (!userId) {
@@ -169,20 +188,20 @@ e_app.get('/', (req, res) => {
 e_app.get('/logout', (req, res) => {
   req.logout((err) => {
     if (err) {
-      console.log(err);
+      console.warn(err);
     }
     res.redirect('/');
   });
 });
 e_app.post('/login', function(req, res, next) {
-  console.log('REQUESTED LOGIN');
+  console.info('REQUESTED LOGIN');
   next();
 }, passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/'
 }));
 e_app.post('/register', urlencodedParser, async function(req, res) {
-  console.log("REQUESTED REGISTER")
+  console.info("REQUESTED REGISTER")
   const username = req.body.username;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
@@ -223,7 +242,7 @@ e_app.post('/register', urlencodedParser, async function(req, res) {
   };
   
   await db.set("user." + newUserId, newUser);
-  console.log("REGISTERING USER")
+  console.info("REGISTERING USER")
 
   // Redirect to login page
   res.redirect('/');
@@ -244,7 +263,7 @@ e_app.get('/bin', (req, res) => {
 e_app.use(express.static(__dirname + '/public'));
 e_app.use(express.static(__dirname + '/fileserve'));
 e_app.listen(process.env.PORT || 4620, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, e_app.settings.env);
+  console.info("Express server listening on port %d in %s mode", this.address().port, e_app.settings.env);
 });
 
 // =========== Util Functions =========== //
