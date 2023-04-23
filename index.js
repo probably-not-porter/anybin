@@ -52,11 +52,13 @@ const upload = multer({ storage: storage });
 
 
 // =========== API =========== //
-// GETS
+// USER API FUNCTIONS
 e_app.get('/api/user', async function(req, res) {
   let obj = await db.get( "user." + req.user.id );
   res.send(obj);
 });
+
+// BIN API FUNCTIONS
 e_app.get('/api/bin', async function(req, res) {
   let bin = await db.get("bin." + req.query.binid);
   res.send(bin);
@@ -78,7 +80,6 @@ e_app.post('/api/bin', jsonParser, async function(req, res) {
   await db.set("bin." + req.body.id, newBin);
   res.send("success");
 });
-
 e_app.put('/api/bin', jsonParser, async function(req, res) {
   console.info("CREATING BIN");
   let userbins = await db.get("user." + req.user.id + ".bins" );
@@ -107,6 +108,11 @@ e_app.put('/api/bin', jsonParser, async function(req, res) {
   res.send(binid);
 });
 
+// ITEM API FUNCTIONS
+e_app.get('/api/item', async function(req, res) {
+  let item = await db.get("item." + req.query.itemid);
+  res.send(item);
+});
 e_app.put('/api/item', jsonParser, async function(req, res) {
   console.info("CREATE ITEM");
   let binPage = await db.get(`bin.${req.body.binid}.items.${req.body.page}`);
@@ -123,13 +129,14 @@ e_app.put('/api/item', jsonParser, async function(req, res) {
     id: itemId,
     description: "Sample Description",
     links: [],
-    images: []
+    image: "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
   }
   await db.set(`bin.${req.body.binid}.items.${req.body.page}`, binPage);
   await db.set(`item.${itemId}`, newItem);
   res.send(newItem);
 });
 
+// IMAGE API FUNCTIONS
 e_app.post('/api/image', upload.single('image'), (req, res) => {
   res.send(req.file.filename);
 });
@@ -184,6 +191,10 @@ e_app.get('/', (req, res) => {
     res.render("home")
   }
   
+});
+e_app.get('/test', (req, res) => {
+  res.render("test",{
+  })
 });
 e_app.get('/logout', (req, res) => {
   req.logout((err) => {
@@ -258,7 +269,15 @@ e_app.get('/bin', (req, res) => {
   }
   
 });
-
+e_app.get('/item', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render("item",{
+    })
+  } else {
+    res.redirect('/');
+  }
+  
+});
 // =========== Start the app =========== //
 e_app.use(express.static(__dirname + '/public'));
 e_app.use(express.static(__dirname + '/fileserve'));

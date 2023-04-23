@@ -67,9 +67,10 @@
     border: 2px solid rgba(0,0,0,0);
     cursor: pointer;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    background-size: cover;
 }
 .empty {
-    color: rgba(255,255,255,0.5);
+    color: rgba(130, 255, 159, 0.5);
     margin: 3px;
     padding: 10px;
     background: rgba(255,255,255,0);
@@ -92,7 +93,7 @@
 }
 .box:hover{
     transition-duration: 100ms;
-    color: #fff;
+    color: rgba(130, 255, 159, 1);
     margin: 10px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.40);
     border: 2px solid rgba(130, 255, 159, 0.5);
@@ -157,4 +158,12 @@
 }
 #save-button i{
 
+}
+
+.item_name{
+    font-size: 20px;
+}
+.item_id{
+    font-size: 10px;
+    color: rgba(130, 255, 159, 0.5);
 }

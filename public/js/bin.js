@@ -66,8 +66,6 @@ async function render(layout){
     
     for (row=1; row <= layout.row; row++){
         for (col=1; col <= layout.col; col++){
-        
-            console.log(`CREATE GRID ITEM col:${col}, row:${row}`);
             let current_item = null;
             
             for (j=0; j < page.length; j++){
@@ -77,28 +75,25 @@ async function render(layout){
                 }
             }
             if (current_item){
-                console.log("CREATE PREEXISTING ITEM");
                 g_elem += `
-                <div class="box" style='grid-row: ${current_item.y}/${current_item.y + current_item.height}; grid-column: ${current_item.x}/${current_item.x + current_item.width};'>
-                    <span class="bin_name">${current_item.id}</span>
+                <div class="box" id="box-${current_item.id}" onclick="window.location.href = '/item?bin=${layout.id}&id=${current_item.id}'" 
+                style='grid-row: ${current_item.y}/${current_item.y + current_item.height}; grid-column: ${current_item.x}/${current_item.x + current_item.width};'>
+                    <span id="name-${current_item.id}" class="item_name"></span>
+                    <span id="id-${current_item.id}" class="item_id"></span>
                 </div>
                 `;
+                getItem(current_item.id);
             } 
             else{
                 let blocked = false;
                 for (j=0; j < page.length; j++){
-                    console.log(page[j].y,page[j].y + page[j].height);
-                    console.log(page[j].x,page[j].x + page[j].width);
                     if (page[j].y <= row && page[j].y + page[j].height > row &&
                         page[j].x <= col && page[j].x + page[j].width > col){
                             blocked = true;
-                            console.log('blocked square')
     
                     }
                 }
-
                 if (!blocked){
-                    console.log("CREATE EMPTY ITEM");
                     g_elem += `
                     <div class="box empty">
                         <span onclick="createItem(${row},${col})" class="bin_name">+</span>
@@ -128,9 +123,6 @@ async function render(layout){
             <i class="bi bi-device-hdd"></i> <span>Save edits to server</span>
         </div>
     `;
-
-    // do this last
-    console.log(UNSAVED);
     if (UNSAVED == true){
         document.getElementById("save-button").style.display = "block";
     }
@@ -266,34 +258,31 @@ async function getBin(binid){
         }
     });
 }
+async function getItem(itemid){
+    $.ajax({
+        type: 'GET',
+        url: '/api/item',
+        data: {itemid: itemid}, // request specific item id
+        success: function(response) { 
+            console.log(response);
+            document.getElementById("box-" + itemid).style.backgroundImage = `url(${response.image})`;
+            document.getElementById("name-" + itemid).innerText= response.name;
+            document.getElementById("id-" + itemid).innerText= response.id;
+        },
+        error: function(xhr, status, err) {
+            console.error('DATA: XHR Error.');
+        }
+    });
+}
 
 
 
 
 // ==================== ON DOC LOAD ======================
 $(document).ready(async function() { 
+    console.info("LOAD BIN PAGE");
     getUserProfile(); // Load user profile when page loads.
-
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     await getBin(urlParams.get('id'));
-});
-
-let el = document.querySelector(".input-wrap .input");
-let widthMachine = document.querySelector(".input-wrap .width-machine");
-el.addEventListener("keyup", () => {
-  widthMachine.innerHTML = el.value;
-});
-
-// Dealing with Textarea Height
-function calcHeight(value) {
-  let numberOfLineBreaks = (value.match(/\n/g) || []).length;
-  // min-height + lines x line-height + padding + border
-  let newHeight = 20 + numberOfLineBreaks * 20 + 12 + 2;
-  return newHeight;
-}
-
-let textarea = document.querySelector(".resize-ta");
-textarea.addEventListener("keyup", () => {
-  textarea.style.height = calcHeight(textarea.value) + "px";
 });

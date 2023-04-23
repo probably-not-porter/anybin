@@ -74,5 +74,6 @@ async function getUserProfile() {
 }
 
 $(document).ready(function() { 
+    console.info("LOAD DASHBOARD PAGE");
     getUserProfile(); // Load user profile when page loads.
 });
