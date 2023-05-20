@@ -281,7 +281,7 @@ e_app.get('/item', (req, res) => {
 // =========== Start the app =========== //
 e_app.use(express.static(__dirname + '/public'));
 e_app.use(express.static(__dirname + '/fileserve'));
-e_app.listen(process.env.PORT || 4620, function(){
+e_app.listen(process.env.PORT || 8000, function(){
   console.info("Express server listening on port %d in %s mode", this.address().port, e_app.settings.env);
 });
 
