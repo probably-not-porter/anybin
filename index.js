@@ -64,6 +64,7 @@ e_app.get('/api/bin', async function(req, res) {
   res.send(bin);
 });
 e_app.post('/api/bin', jsonParser, async function(req, res) {
+  console.log(req.body)
   const newBin = {
     name: req.body.name,
     description: req.body.description,
@@ -103,7 +104,7 @@ e_app.put('/api/bin', jsonParser, async function(req, res) {
   };
   
   await db.set("bin." + binid, newBin);
-  await db.set  ("user." + req.user.id + ".bins", userbins);
+  await db.set("user." + req.user.id + ".bins", userbins);
   
   res.send(binid);
 });
@@ -134,6 +135,20 @@ e_app.put('/api/item', jsonParser, async function(req, res) {
   await db.set(`bin.${req.body.binid}.items.${req.body.page}`, binPage);
   await db.set(`item.${itemId}`, newItem);
   res.send(newItem);
+});
+
+e_app.post('/api/item', jsonParser, async function(req, res) {
+  console.log(req.body);
+  const newItem = {
+    name: req.body.name,
+    id: req.body.id,
+    description: req.body.description,
+    links: JSON.parse(req.body.links),
+    image: req.body.image
+  };
+
+  await db.set(`item.${req.body.id}`, newItem);
+  res.send("success");
 });
 
 // IMAGE API FUNCTIONS

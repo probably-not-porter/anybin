@@ -76,10 +76,37 @@ async function render(layout){
             }
             if (current_item){
                 g_elem += `
-                <div class="box" id="box-${current_item.id}" onclick="window.location.href = '/item?bin=${layout.id}&id=${current_item.id}'" 
-                style='grid-row: ${current_item.y}/${current_item.y + current_item.height}; grid-column: ${current_item.x}/${current_item.x + current_item.width};'>
+                <div class="box" id="box-${current_item.id}" style='grid-row: ${current_item.y}/${current_item.y + current_item.height}; grid-column: ${current_item.x}/${current_item.x + current_item.width};'>
+                    <div onclick="window.location.href = '/item?bin=${layout.id}&id=${current_item.id}'" style='width: 100%; height: 100%'></div>
                     <span id="name-${current_item.id}" class="item_name"></span>
-                    <span id="id-${current_item.id}" class="item_id"></span>
+
+                    <div class="box-button left">
+                        <span> 
+                            <div onclick="addItemDim('left', ${current_item.x}, ${current_item.y})">+</div> <br>
+                            <div onclick="subItemDim('left', ${current_item.x}, ${current_item.y})">-</div>
+                        </span>
+                    </div>
+
+                    <div class="box-button right">
+                        <span> 
+                            <div onclick="addItemDim('right', ${current_item.x}, ${current_item.y})">+</div> <br>
+                            <div onclick="subItemDim('right', ${current_item.x}, ${current_item.y})">-</div>
+                        </span>
+                    </div>
+
+                    <div class="box-button up">
+                        <span> 
+                            <div onclick="addItemDim('up', ${current_item.x}, ${current_item.y})">+</div> 
+                            <div onclick="subItemDim('up', ${current_item.x}, ${current_item.y})">-</div>
+                        </span>
+                    </div>
+
+                    <div class="box-button down">
+                        <span> 
+                            <div onclick="addItemDim('down', ${current_item.x}, ${current_item.y})">+</div> 
+                            <div onclick="subItemDim('down', ${current_item.x}, ${current_item.y})">-</div>
+                        </span>
+                    </div>
                 </div>
                 `;
                 getItem(current_item.id);
@@ -128,6 +155,100 @@ async function render(layout){
     }
 }
 // =================== EDITING FUNCTIONS =========================
+function subItemDim(dir, binx, biny){
+    items = CURRENT_BIN.items[CURRENT_PAGE];
+    target = null;
+    for (x = 0; x < items.length; x++){
+        if (items[x].x == binx && items[x].y == biny){
+            target = items[x];
+        }
+    }
+    if (target){
+        switch (dir){
+            case "left":
+                if (target.width > 1){
+                    target.width = target.width - 1;
+                    target.x = target.x + 1;
+                    UNSAVED = true;
+                    render(CURRENT_BIN);
+                }
+                break;
+
+            case "right":
+                if (target.width > 1){
+                    target.width = target.width - 1;
+                    UNSAVED = true;
+                    render(CURRENT_BIN);
+                }
+                break;
+
+            case "up":
+                if (target.height > 1){
+                    target.height = target.height - 1;
+                    target.y = target.y + 1;
+                    UNSAVED = true;
+                    render(CURRENT_BIN);
+                }
+                break;
+
+            case "down":
+                if (target.height > 1){
+                    target.height = target.height - 1;
+                    UNSAVED = true;
+                    render(CURRENT_BIN);
+                }
+                break;
+        }
+    }
+}
+
+function addItemDim(dir, binx, biny){
+    items = CURRENT_BIN.items[CURRENT_PAGE];
+    target = null;
+    for (x = 0; x < items.length; x++){
+        if (items[x].x == binx && items[x].y == biny){
+            target = items[x];
+        }
+    }
+    if (target){
+        switch (dir){
+            case "left":
+                if (target.x > 1){
+                    target.width = target.width + 1;
+                    target.x = target.x - 1;
+                    UNSAVED = true;
+                    render(CURRENT_BIN);
+                }
+                break;
+
+            case "right":
+                if (target.x < CURRENT_BIN.col){
+                    target.width = target.width + 1;
+                    UNSAVED = true;
+                    render(CURRENT_BIN);
+                }
+                break;
+
+            case "up":
+                if (target.y > 1){
+                    target.height = target.height + 1;
+                    target.y = target.y - 1;
+                    UNSAVED = true;
+                    render(CURRENT_BIN);
+                }
+                break;
+
+            case "down":
+                if (target.y < CURRENT_BIN.row){
+                    target.height = target.height + 1;
+                    UNSAVED = true;
+                    render(CURRENT_BIN);
+                }
+                break;
+        }
+        
+    }
+}
 
 function editDim(col,row){
     console.log("local edit bin dims to " + col + ',' + row);
@@ -197,23 +318,45 @@ async function getUserProfile() {
 }
 async function createItem(row, col){
     console.log(`create bin ${row}, ${col}`)
-    saveEdits()
-    jQuery.ajax({
-        url: "/api/item",
-        type: "PUT",
-        data: { 
-            "binid": CURRENT_BIN.id,
-            "row": col,
-            "col": row,
-            "page": CURRENT_PAGE
-        },
-        dataType: "json",
-        success: function(result) {
-            console.log(result);
-            getBin(CURRENT_BIN.id)
-            
+    if (UNSAVED == true){
+        if (confirm("Creating a new item will save your current unsaved changes, ok?")){
+            saveEdits()
+            jQuery.ajax({
+                url: "/api/item",
+                type: "PUT",
+                data: { 
+                    "binid": CURRENT_BIN.id,
+                    "row": col,
+                    "col": row,
+                    "page": CURRENT_PAGE
+                },
+                dataType: "json",
+                success: function(result) {
+                    console.log(result);
+                    getBin(CURRENT_BIN.id)
+                    
+                }
+            });
         }
-    });
+    }else{
+        saveEdits()
+        jQuery.ajax({
+            url: "/api/item",
+            type: "PUT",
+            data: { 
+                "binid": CURRENT_BIN.id,
+                "row": col,
+                "col": row,
+                "page": CURRENT_PAGE
+            },
+            dataType: "json",
+            success: function(result) {
+                console.log(result);
+                getBin(CURRENT_BIN.id)
+                
+            }
+        });
+    }
 }
 async function saveEdits(){
     const date = new Date();
@@ -264,10 +407,9 @@ async function getItem(itemid){
         url: '/api/item',
         data: {itemid: itemid}, // request specific item id
         success: function(response) { 
-            console.log(response);
             document.getElementById("box-" + itemid).style.backgroundImage = `url(${response.image})`;
             document.getElementById("name-" + itemid).innerText= response.name;
-            document.getElementById("id-" + itemid).innerText= response.id;
+            //document.getElementById("id-" + itemid).innerText= response.id;
         },
         error: function(xhr, status, err) {
             console.error('DATA: XHR Error.');

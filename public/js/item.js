@@ -1,12 +1,12 @@
 CURRENT_ITEM = null;
-CURRENT_BIN_ID = null;
+CURRENT_BIN = null;
 var UNSAVED = false;
 
-async function render(item,binid){
+async function render(item){
     const c = document.getElementById("page-content");
     c.innerHTML = `
         <div id="toolbar">
-            <a href='/bin?id=${binid}'>Test</a> -> <input type="text" id="itemname" name="itemname" value="${item.name}">
+            <a href='/bin?id=${CURRENT_BIN.id}'>${CURRENT_BIN.name}</a> / <input onchange="editName(this.value)" type="text" id="itemname" name="itemname" value="${item.name}">
         </div>
         <div id="left_content">
             <button onclick="editImage();">Edit Image</button>
@@ -20,9 +20,16 @@ async function render(item,binid){
 
 function editImage(){
     let new_img = prompt('Change the item image (paste a URL)');
-    CURRENT_ITEM.image = new_img;
-    UNSAVED = true;
-    render(CURRENT_ITEM, CURRENT_BIN_ID);
+    if (new_img){
+        CURRENT_ITEM.image = new_img;
+        saveEdits();
+        render(CURRENT_ITEM, CURRENT_BIN.id);
+    }
+}
+function editName(n){
+    CURRENT_ITEM.name = n;
+    saveEdits();
+    render(CURRENT_ITEM, CURRENT_BIN.id);
 }
 
 
@@ -39,22 +46,55 @@ async function getUserProfile() {
     });
 }
 
-async function getItem(itemid,binid){
+async function getItem(itemid){
     $.ajax({
         type: 'GET',
         url: '/api/item',
         data: {itemid: itemid}, // request specific item id
         success: function(response) { 
             console.log(response);
-            render(response,binid);
+            render(response);
             CURRENT_ITEM = response;
-            CURRENT_BIN_ID = binid;
+        },
+        error: function(xhr, status, err) {
+            console.error('DATA: XHR Error.');
+        }
+    });
+}
+async function getBin(binid){
+    $.ajax({
+        type: 'GET',
+        url: '/api/bin',
+        data: {binid: binid}, // request specific bin id
+        success: function(response) { 
+            CURRENT_BIN = response;
+            render(CURRENT_ITEM);
             
         },
         error: function(xhr, status, err) {
             console.error('DATA: XHR Error.');
         }
     });
+}
+
+async function saveEdits(){
+    console.log(CURRENT_ITEM);
+    jQuery.ajax({
+        url: "/api/item",
+        type: "POST",
+        data: {
+                "name": CURRENT_ITEM.name,
+                "id": CURRENT_ITEM.id,
+                "description": CURRENT_ITEM.description,
+                "links": JSON.stringify(CURRENT_ITEM.links),
+                "image": CURRENT_ITEM.image
+            },
+        dataType: "json",
+        success: function(result) {
+            console.log(result);
+            
+        }
+    });   
 }
 
 $(document).ready(async function() { 
@@ -66,5 +106,6 @@ $(document).ready(async function() {
     const itemid = urlParams.get('id');
     const binid = urlParams.get('bin');
 
-    getItem(itemid, binid);
+    getItem(itemid);
+    getBin(binid);
 });

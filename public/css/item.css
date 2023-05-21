@@ -11,16 +11,18 @@
     float: left;
     box-shadow: inset 14px 0 18px -14px rgba(0,0,0,0.4);
     position:relative;
+    color: rgba(255,255,255,0.8);
+    font-size: 40px;
+    padding-left: 30px;
 }
 #itemname{
     background: none;
     border: 1px solid rgba(0,0,0,0);
-    color: rgba(255,255,255,0.8);
-    font-size: 40px;
     line-height: 80px;
-    margin-left: 20px;
+    margin-left: 0px;
     max-width: 300px;
     padding: 2px;
+    color: rgba(255,255,255,0.8);
 }
 #left_content{
     position: absolute;

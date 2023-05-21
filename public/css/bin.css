@@ -64,10 +64,11 @@
     border-radius: 5px;
     height: auto;
     transition-duration: 800ms;
-    border: 2px solid rgba(0,0,0,0);
+    border: 2px solid rgba(0,0,0,0.5);;
     cursor: pointer;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
     background-size: cover;
+    position:relative;
 }
 .empty {
     color: rgba(130, 255, 159, 0.5);
@@ -93,11 +94,14 @@
 }
 .box:hover{
     transition-duration: 100ms;
-    color: rgba(130, 255, 159, 1);
     margin: 10px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.40);
     border: 2px solid rgba(130, 255, 159, 0.5);
-    
+}
+.box:hover .item_name{
+    transition-duration: 100ms;
+    color:rgba(0, 0, 0, 0);
+    display: none;
 }
 #gridPos{
     position:absolute;
@@ -162,8 +166,71 @@
 
 .item_name{
     font-size: 20px;
+    background-color: rgba(0,0,0,0.5);
+    position:absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    transition-duration: 100ms;
 }
 .item_id{
     font-size: 10px;
     color: rgba(130, 255, 159, 0.5);
 }
+
+
+.box-button{
+    position: absolute;
+    display: none;
+    text-align: center;
+    color: rgba(130, 255, 159, 0.5);
+    z-index: 10000;
+    
+}
+.box:hover .box-button{
+    transition-duration: 100ms;
+    display: table;
+}
+.box-button span{
+    display: table-cell;
+    vertical-align: middle;
+}
+.box-button div{
+    display: inline-block;
+    font-size: 15px;
+    width: 25px;
+    height: 25px;
+    background-color: rgba(130, 255, 159, 0.5);
+    color: black;
+    border-radius: 50%;
+    transition-duration: 100ms;
+}
+.box-button div:hover{
+    color: rgb(130, 255, 159);
+    background-color: black;
+    cursor: pointer;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5), 0 5px 5px 0 rgba(0, 0, 0, 0.54);
+
+}
+.box-button.left{
+    left: -10px;
+    top: 0px;
+    height: 100%;
+}
+.box-button.right{
+    right: -10px;
+    top: 0px;
+    height: 100%;
+}
+.box-button.up{
+    top: -10px;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+}
+.box-button.down{
+    bottom: -10px;
+    right: 0px;
+    left: 0px;
+    width: 100%;
+}   
