@@ -30,20 +30,34 @@
 #binname:focus{
     border-bottom: 2px solid white;
 }
-#binid{
-    color: rgba(255,255,255,0.5);
-    position: absolute; 
-    top: 10px;
-    right: 10px;
-}
 #info1{
     color: rgba(255,255,255,0.8);
     position: absolute; 
-    bottom: 10px;
+    top: 10px;
     right: 10px;
+    text-align: right;
+    line-height: 14px;
+    font-size: 12px;
 }
 [contenteditable]:focus {
     outline: 0px solid transparent;
+}
+input[type=number]::-webkit-inner-spin-button {
+  opacity: 1;
+}
+#bincol{
+    background: none;
+    border: none;
+    color: rgba(130, 255, 159, 1);
+    line-height: normal;
+    width: 40px;
+}
+#binrow{
+    background: none;
+    border: none;
+    color: rgba(130, 255, 159, 1);
+    line-height: normal;
+    width: 40px;
 }
 .wrapper {
     display: grid;
@@ -110,27 +124,7 @@
     height: calc(100% - 80px);
     margin-top: 80px;
 }
-.barbutton{
-    transition: transform .2s ease-in-out;
-    position: block;
-    line-height: 30px;
-    height: 30px;
-    width: 30px;
-    margin: 0px;
-    padding: 0px;
-    top: 0px;
-    
-    vertical-align:middle;
-}
-.barbutton i{
-    margin: 0 auto;
-    color: rgba(255,255,255,0.5);
-    font-size: 20px;
-}
-.barbutton:hover i{
-    color: rgb(130, 255, 159);
-    transition-duration: 200ms;
-}
+
 #buttons{
    position:absolute;
    right: 250px;
@@ -139,29 +133,7 @@
    top: 0px;
 }
 #save-button{
-    position:absolute;
-    bottom: 50px;
-    right: 50px;
-    z-index: 10000;
-    font-size: 20px;
-    background-color: rgba(255,255,255,0.5);
-    padding: 20px;
-    border-radius: 5px;
-    border: 2px solid rgba(0,0,0,0);
-    transition-duration: 1000ms;
-    cursor: pointer;
-    color: black;
     display: none;
-}
-#save-button:hover{
-    border: 2px solid rgba(130, 255, 159, 1);
-    background-color: rgba(255,255,255,0.9);
-}
-#save-button span{
-    font-size: 20px;
-}
-#save-button i{
-
 }
 
 .item_name{

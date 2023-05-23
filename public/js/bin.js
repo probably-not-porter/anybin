@@ -29,21 +29,25 @@ async function render(layout){
     toolbar.innerHTML = `
         </div>
             <input type="text" onchange="editName(this.value)" id="binname" name="binname" value="${layout.name}">
-            <span id="binid"><strong>Grid:</strong> ${layout.row} x ${layout.col}, <strong>ID:</strong> ${layout.id}</span>
-            <span id="info1"><strong>Last edit:</strong> ${dateStr}</span>
+            <span id="info1">
+                <strong>ID:</strong> ${layout.id}<br>
+                <strong>Last edit:</strong> ${dateStr}<br>
+
+                <label for="bincol">Cols:</label>
+                <input type="number" onchange="editDim(this.value, ${layout.row})" id="bincol" name="bincol" min="2" max="16" value="${layout.col}">
+                <label for="binrow">, Rows:</label>
+                <input type="number" onchange="editDim(${layout.col},this.value)" id="binrow" name="binrow" min="2" max="10" value="${layout.row}">
+            </span>
+            <span id="info1"></span>
             <div id=buttons>
-            <button type="button" class="barbutton btn btn-default btn-lg">
-                <i class="bi bi-gear">  </i>
+            <button id="save-button" type="button" onclick="saveEdits()" class="barbutton btn btn-default btn-lg">
+                <i class="bi bi-device-hdd"></i>
             </button>
-            <button type="button" class="barbutton btn btn-default btn-lg">
+            <button type="button" onclick="$('.box-edit-controls').toggle();"class="barbutton btn btn-default btn-lg">
                 <i class="bi bi-pencil">  </i>
             </button>
 
-            <label for="bincol">Columns:</label>
-            <input type="number" onchange="editDim(this.value, ${layout.row})" id="bincol" name="bincol" min="2" max="16" value="${layout.col}">
-
-            <label for="binrow">Rows:</label>
-            <input type="number" onchange="editDim(${layout.col},this.value)" id="binrow" name="binrow" min="2" max="10" value="${layout.row}">
+            
         </div>
     `;
     c.appendChild(toolbar);
@@ -79,33 +83,34 @@ async function render(layout){
                 <div class="box" id="box-${current_item.id}" style='grid-row: ${current_item.y}/${current_item.y + current_item.height}; grid-column: ${current_item.x}/${current_item.x + current_item.width};'>
                     <div onclick="window.location.href = '/item?bin=${layout.id}&id=${current_item.id}'" style='width: 100%; height: 100%'></div>
                     <span id="name-${current_item.id}" class="item_name"></span>
+                    <div class='box-edit-controls'>
+                        <div class="box-button left">
+                            <span> 
+                                <div onclick="addItemDim('left', ${current_item.x}, ${current_item.y})">+</div> <br>
+                                <div onclick="subItemDim('left', ${current_item.x}, ${current_item.y})">-</div>
+                            </span>
+                        </div>
 
-                    <div class="box-button left">
-                        <span> 
-                            <div onclick="addItemDim('left', ${current_item.x}, ${current_item.y})">+</div> <br>
-                            <div onclick="subItemDim('left', ${current_item.x}, ${current_item.y})">-</div>
-                        </span>
-                    </div>
+                        <div class="box-button right">
+                            <span> 
+                                <div onclick="addItemDim('right', ${current_item.x}, ${current_item.y})">+</div> <br>
+                                <div onclick="subItemDim('right', ${current_item.x}, ${current_item.y})">-</div>
+                            </span>
+                        </div>
 
-                    <div class="box-button right">
-                        <span> 
-                            <div onclick="addItemDim('right', ${current_item.x}, ${current_item.y})">+</div> <br>
-                            <div onclick="subItemDim('right', ${current_item.x}, ${current_item.y})">-</div>
-                        </span>
-                    </div>
+                        <div class="box-button up">
+                            <span> 
+                                <div onclick="addItemDim('up', ${current_item.x}, ${current_item.y})">+</div> 
+                                <div onclick="subItemDim('up', ${current_item.x}, ${current_item.y})">-</div>
+                            </span>
+                        </div>
 
-                    <div class="box-button up">
-                        <span> 
-                            <div onclick="addItemDim('up', ${current_item.x}, ${current_item.y})">+</div> 
-                            <div onclick="subItemDim('up', ${current_item.x}, ${current_item.y})">-</div>
-                        </span>
-                    </div>
-
-                    <div class="box-button down">
-                        <span> 
-                            <div onclick="addItemDim('down', ${current_item.x}, ${current_item.y})">+</div> 
-                            <div onclick="subItemDim('down', ${current_item.x}, ${current_item.y})">-</div>
-                        </span>
+                        <div class="box-button down">
+                            <span> 
+                                <div onclick="addItemDim('down', ${current_item.x}, ${current_item.y})">+</div> 
+                                <div onclick="subItemDim('down', ${current_item.x}, ${current_item.y})">-</div>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 `;
@@ -139,20 +144,17 @@ async function render(layout){
         editName(document.getElementById("binname").textContent);
     });
 
-    new Swappable.default(document.getElementById("grid"), {
-        draggable: '.box'
-    }).on('swappable:start', () => console.log('swappable:start'))
-    .on('swappable:swapped', () => console.log('swappable:swapped'))
-    .on('swappable:stop', () => console.log('swappable:stop'));
+    // new Swappable.default(document.getElementById("grid"), {
+    //     draggable: '.box'
+    // }).on('swappable:start', () => console.log('swappable:start'))
+    // .on('swappable:swapped', () => console.log('swappable:swapped'))
+    // .on('swappable:stop', () => console.log('swappable:stop'));
 
-    c.innerHTML +=`
-        <div id='save-button' onclick="saveEdits()">
-            <i class="bi bi-device-hdd"></i> <span>Save edits to server</span>
-        </div>
-    `;
     if (UNSAVED == true){
-        document.getElementById("save-button").style.display = "block";
+        document.getElementById("save-button").style.display = "inline-block";
     }
+
+    $('.box-edit-controls').toggle();
 }
 // =================== EDITING FUNCTIONS =========================
 function subItemDim(dir, binx, biny){
@@ -260,11 +262,15 @@ function editDim(col,row){
 }
 
 function editName(name){
-    console.log("local edit bin name to " + name);
-    CURRENT_BIN.name = name;
-    UNSAVED = true;
-    // update interface
-    render(CURRENT_BIN);
+    if (name != ""){
+        console.log("local edit bin name to " + name);
+
+        CURRENT_BIN.name = name;
+        UNSAVED = true;
+        // update interface
+        render(CURRENT_BIN);
+    }
+    
 }
 function editDescription(desc){
     console.log("local edit bin name to " + desc);

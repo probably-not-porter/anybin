@@ -41,7 +41,7 @@ e_app.use(urlencodedParser);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'fileserve/')
+    cb(null, 'fileserve/local_uploads/')
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -107,6 +107,15 @@ e_app.put('/api/bin', jsonParser, async function(req, res) {
   await db.set("user." + req.user.id + ".bins", userbins);
   
   res.send(binid);
+});
+e_app.delete('/api/bin', async function(req, res) {
+  await db.delete(`bin.${req.body.binid}`);
+
+  let userbins = await db.get(`user.${req.user.id}.bins` );
+  userbins = userbins.filter(v => v != req.body.binid.toString()); 
+  await db.set(`user.${req.user.id}.bins`, userbins);
+
+  console.log(await db.get(`bin`));
 });
 
 // ITEM API FUNCTIONS

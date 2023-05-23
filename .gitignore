@@ -1,4 +1,5 @@
 /node_modules
+/fileserve
 *.log
 *.sqlite
 .env

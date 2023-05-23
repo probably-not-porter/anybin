@@ -9,7 +9,8 @@ async function render(item){
             <a href='/bin?id=${CURRENT_BIN.id}'>${CURRENT_BIN.name}</a> / <input onchange="editName(this.value)" type="text" id="itemname" name="itemname" value="${item.name}">
         </div>
         <div id="left_content">
-            <button onclick="editImage();">Edit Image</button>
+            <button onclick="editImage();">Replace Image (URL)</button>
+            <input type="file" id="img_uploader" name="img" accept="image/*" onchange="editImageStore();"></input>
             <img src="${item.image}" id="item_img">
         </div>
         <div id="right_content">
@@ -26,6 +27,33 @@ function editImage(){
         render(CURRENT_ITEM, CURRENT_BIN.id);
     }
 }
+function editImageStore(){
+    console.log("attempt image upload");
+
+
+    const formData = new FormData();
+    const imageFile = document.querySelector('#img_uploader').files[0];
+
+    formData.append('image', imageFile);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/api/image', true);
+
+    xhr.onload = function () {
+        if (this.status === 200) {
+            console.info('UPLOAD STATUS: ', this.statusText);
+            console.info("UPLOADED: " + this.responseText);
+            CURRENT_ITEM.image = this.responseText;
+            saveEdits();
+            render(CURRENT_ITEM, CURRENT_BIN.id);
+        } else {
+            console.info('UPLOAD STATUS: ', this.statusText);
+        }
+    };
+    xhr.send(formData);
+}
+
+
 function editName(n){
     CURRENT_ITEM.name = n;
     saveEdits();
@@ -96,6 +124,9 @@ async function saveEdits(){
         }
     });   
 }
+
+
+    
 
 $(document).ready(async function() { 
     console.info("LOAD ITEM PAGE");
