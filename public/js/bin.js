@@ -156,6 +156,7 @@ async function render(layout){
 
     $('.box-edit-controls').toggle();
 }
+
 // =================== EDITING FUNCTIONS =========================
 function subItemDim(dir, binx, biny){
     items = CURRENT_BIN.items[CURRENT_PAGE];
@@ -203,7 +204,6 @@ function subItemDim(dir, binx, biny){
         }
     }
 }
-
 function addItemDim(dir, binx, biny){
     items = CURRENT_BIN.items[CURRENT_PAGE];
     target = null;
@@ -251,7 +251,6 @@ function addItemDim(dir, binx, biny){
         
     }
 }
-
 function editDim(col,row){
     console.log("local edit bin dims to " + col + ',' + row);
     CURRENT_BIN.col = col;
@@ -260,7 +259,6 @@ function editDim(col,row){
     // update interface
     render(CURRENT_BIN);
 }
-
 function editName(name){
     if (name != ""){
         console.log("local edit bin name to " + name);
@@ -279,7 +277,6 @@ function editDescription(desc){
     // update interface
     render(CURRENT_BIN);
 }
-
 function addTags(tagList){
     console.log("local edit tags to add " + tagList);
     for (x=0;x<tagList.length; x++){
@@ -305,8 +302,6 @@ function addTag(tag){
     }
     render(CURRENT_BIN);
 }
-
-
 
 // =================== REQUEST FUNCTIONS =========================
 // Get Logged in User information from server
@@ -391,7 +386,6 @@ async function saveEdits(){
     UNSAVED = false;
     render(CURRENT_BIN);  
 }
-
 async function getBin(binid){
     $.ajax({
         type: 'GET',
@@ -422,9 +416,6 @@ async function getItem(itemid){
         }
     });
 }
-
-
-
 
 // ==================== ON DOC LOAD ======================
 $(document).ready(async function() { 

@@ -2,6 +2,7 @@ CURRENT_ITEM = null;
 CURRENT_BIN = null;
 var UNSAVED = false;
 
+// =============== HTML Rendering ================
 async function render(item){
     const c = document.getElementById("page-content");
     c.innerHTML = `
@@ -19,6 +20,7 @@ async function render(item){
     `
 }
 
+// =================== EDITING FUNCTIONS =========================
 function editImage(){
     let new_img = prompt('Change the item image (paste a URL)');
     if (new_img){
@@ -52,15 +54,13 @@ function editImageStore(){
     };
     xhr.send(formData);
 }
-
-
 function editName(n){
     CURRENT_ITEM.name = n;
     saveEdits();
     render(CURRENT_ITEM, CURRENT_BIN.id);
 }
 
-
+// =================== REQUEST FUNCTIONS =========================
 async function getUserProfile() {
     $.ajax({ // api request using built in user data
         type: 'GET',
@@ -73,7 +73,6 @@ async function getUserProfile() {
         }
     });
 }
-
 async function getItem(itemid){
     $.ajax({
         type: 'GET',
@@ -104,7 +103,6 @@ async function getBin(binid){
         }
     });
 }
-
 async function saveEdits(){
     console.log(CURRENT_ITEM);
     jQuery.ajax({
@@ -125,9 +123,7 @@ async function saveEdits(){
     });   
 }
 
-
-    
-
+// ==================== ON DOC LOAD ======================
 $(document).ready(async function() { 
     console.info("LOAD ITEM PAGE");
     getUserProfile(); // Load user profile when page loads.

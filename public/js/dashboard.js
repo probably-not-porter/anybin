@@ -1,10 +1,7 @@
 // Dashboard javascript
 // loads user, standard logged-in dashboard, and bins.
 
-
-
-
-// get a single bin by id
+// =================== REQUEST FUNCTIONS =========================
 async function getBin(binid){
     $.ajax({
         type: 'GET',
@@ -80,7 +77,6 @@ async function getBin(binid){
         }
     });
 }
-// create a single bin
 async function putBin(){
     $.ajax({
         type: 'PUT',
@@ -94,7 +90,6 @@ async function putBin(){
         }
     });
 }
-
 async function delBin(binid){
     if (confirm("Are you sure you want to delete this?") == true) {
         $.ajax({
@@ -114,8 +109,6 @@ async function delBin(binid){
     }
     
 }
-
-// Get Logged in User information from server
 async function getUserProfile() {
     const c = document.getElementById("page-content");
     c.innerHTML = `
@@ -142,6 +135,7 @@ async function getUserProfile() {
     });
 }
 
+// ==================== ON DOC LOAD ======================
 $(document).ready(function() { 
     console.info("LOAD DASHBOARD PAGE");
     getUserProfile(); // Load user profile when page loads.
