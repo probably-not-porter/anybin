@@ -58,14 +58,14 @@ async function getBin(binid){
             let new_item = `
                 <div class='box'>
                     <button style='float: right;' id="save-button" type="button" onclick='delBin("${response.id}")' class="barbutton btn btn-default btn-lg">
-                        <i  class="bi bi-trash"></i>
-                        <span style='position: absolute; color: white; font-size: 10px; bottom: 0px; left: 10px;'>Edited ${editString} ago</span>
+                        <i style='font-size: 20px;' class="bi bi-trash"></i>
                     </button>
-                    
                     <div style='width: 100%; height: 100%;'onclick='window.location.href = "/bin?id=" + "${response.id}";'>
                         <span class='bin_name'>${response.name}</span>
                         <br>
                         <span style='font-size: 12px;'><i class="bi bi-file-earmark"></i> ${pages}, <i class="bi bi-gem"></i> ${items}</span>
+                        <span style='position: absolute; color: white; font-size: 10px; bottom: 0px; left: 10px;'>Edited ${editString} ago</span>
+
                     </div>
                 </div>
             `

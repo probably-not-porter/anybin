@@ -162,7 +162,7 @@ e_app.post('/api/item', jsonParser, async function(req, res) {
 
 // IMAGE API FUNCTIONS
 e_app.post('/api/image', upload.single('image'), (req, res) => {
-  res.send(req.file.filename);
+  res.send("/local_uploads/" + req.file.filename);
 });
 
 

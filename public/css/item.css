@@ -26,20 +26,22 @@
 }
 #left_content{
     position: absolute;
+    display: inline-block;
     top: 80px;
     left: 0px;
     width: 60%;
-    height: calc(100% - 80px);
+    height: calc(100% - 180px) !important;
+    overflow: hidden;
 }
 #right_content{
     position: absolute;
+    
     top: 80px;
     right: 0px;
     width: 40%;
     height: calc(100% - 80px);
 }
 #item_img{
-    height: 100%;
-    width: auto;
-    display:block;
+    object-fit: contain;
+    max-width: 40vw;
 }
