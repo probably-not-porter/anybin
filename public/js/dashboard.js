@@ -63,8 +63,8 @@ async function getBin(binid){
                     <div style='width: 100%; height: 100%;'onclick='window.location.href = "/bin?id=" + "${response.id}";'>
                         <span class='bin_name'>${response.name}</span>
                         <br>
-                        <span style='font-size: 12px;'><i class="bi bi-file-earmark"></i> ${pages}, <i class="bi bi-gem"></i> ${items}</span>
-                        <span style='position: absolute; color: white; font-size: 10px; bottom: 0px; left: 10px;'>Edited ${editString} ago</span>
+                        <span style='font-size: 12px;'><i class="bi bi-file-earmark"></i> ${pages}  <i class="bi bi-gem"></i> ${items}</span>
+                        <span style='position: absolute; color: rgba(255,255,255,0.3); font-size: 10px; bottom: 0px; left: 10px;'>Edited ${editString} ago</span>
 
                     </div>
                 </div>
@@ -113,10 +113,10 @@ async function getUserProfile() {
     const c = document.getElementById("page-content");
     c.innerHTML = `
         <div id='grid' class="wrapper">
-            <div class="box" onclick='putBin()'>
-                <span class="bin_name">Create New</span>
-            </div>
+            
         </div>
+        <div class="create-button" onclick='putBin()'>+</div>
+        <div class="create-flag">Create New</div>
     `;
 
     $.ajax({ // api request using built in user data

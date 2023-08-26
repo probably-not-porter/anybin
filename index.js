@@ -53,17 +53,16 @@ const upload = multer({ storage: storage });
 
 // =========== API =========== //
 // USER API FUNCTIONS
-e_app.get('/api/user', async function(req, res) {
+e_app.get('/api/user', async function(req, res) { // fetch a user
   let obj = await db.get( "user." + req.user.id );
   res.send(obj);
 });
-
 // BIN API FUNCTIONS
-e_app.get('/api/bin', async function(req, res) {
+e_app.get('/api/bin', async function(req, res) { // fetch the contents of a bin
   let bin = await db.get("bin." + req.query.binid);
   res.send(bin);
 });
-e_app.post('/api/bin', jsonParser, async function(req, res) {
+e_app.post('/api/bin', jsonParser, async function(req, res) { // update a bin
   console.log(req.body)
   const newBin = {
     name: req.body.name,
@@ -81,7 +80,7 @@ e_app.post('/api/bin', jsonParser, async function(req, res) {
   await db.set("bin." + req.body.id, newBin);
   res.send("success");
 });
-e_app.put('/api/bin', jsonParser, async function(req, res) {
+e_app.put('/api/bin', jsonParser, async function(req, res) { // create a new bin
   console.info("CREATING BIN");
   let userbins = await db.get("user." + req.user.id + ".bins" );
   const binid = makeid(12);
@@ -108,7 +107,7 @@ e_app.put('/api/bin', jsonParser, async function(req, res) {
   
   res.send(binid);
 });
-e_app.delete('/api/bin', async function(req, res) {
+e_app.delete('/api/bin', async function(req, res) { // remove a bin
   await db.delete(`bin.${req.body.binid}`);
 
   let userbins = await db.get(`user.${req.user.id}.bins` );
@@ -117,13 +116,12 @@ e_app.delete('/api/bin', async function(req, res) {
 
   console.log(await db.get(`bin`));
 });
-
 // ITEM API FUNCTIONS
-e_app.get('/api/item', async function(req, res) {
+e_app.get('/api/item', async function(req, res) { // fetch the contents of an item
   let item = await db.get("item." + req.query.itemid);
   res.send(item);
 });
-e_app.put('/api/item', jsonParser, async function(req, res) {
+e_app.put('/api/item', jsonParser, async function(req, res) { // create a new item
   console.info("CREATE ITEM");
   let binPage = await db.get(`bin.${req.body.binid}.items.${req.body.page}`);
   let itemId = makeid(14);
@@ -145,8 +143,7 @@ e_app.put('/api/item', jsonParser, async function(req, res) {
   await db.set(`item.${itemId}`, newItem);
   res.send(newItem);
 });
-
-e_app.post('/api/item', jsonParser, async function(req, res) {
+e_app.post('/api/item', jsonParser, async function(req, res) { // update an item
   console.log(req.body);
   const newItem = {
     name: req.body.name,
@@ -159,17 +156,12 @@ e_app.post('/api/item', jsonParser, async function(req, res) {
   await db.set(`item.${req.body.id}`, newItem);
   res.send("success");
 });
-
 // IMAGE API FUNCTIONS
-e_app.post('/api/image', upload.single('image'), (req, res) => {
+e_app.post('/api/image', upload.single('image'), (req, res) => { // create a new image (upload)
   res.send("/local_uploads/" + req.file.filename);
 });
 
-
 // =========== Auth =========== //
-
-
-
 // Passport setup
 passport.use(new LocalStrategy(
   async function(username, password, done) {

@@ -40,7 +40,7 @@
 
 .box {
     color: #fff;
-    margin: 20px;
+    margin: 2px;
     padding: 10px;
     background: rgba(255,255,255,0.05);
     border-radius: 10px;
@@ -68,4 +68,50 @@
 }
 .glyphicon, .glyphicon a{
     color: white;
+}
+#page-content{
+    height: 100vh;
+    overflow-y:auto
+}
+.create-button{
+    position:absolute;
+    background-color: rgb(30,30,30);
+    border: 1px solid rgba(130, 255, 159, 1);
+    color: rgba(130, 255, 159, 1);
+    z-index: 1000;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 24px;
+    transition-duration: 300ms;
+}
+.create-button:hover{
+    border: 1px solid white;
+    color: white;
+    cursor: pointer;
+    transition-duration: 300ms;
+}
+.create-flag{
+    position:absolute;
+    overflow: hidden;
+    background-color: rgb(30,30,30, 0.5);
+    bottom: 20px;
+    right: 40px;
+    height: 40px;
+    width: 0px;
+    padding-top: 6px;
+    padding-left: 10px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: 1px solid white;
+    color: white;
+}
+.create-button:hover ~ .create-flag{
+    transition-duration: 400ms;
+    width: 130px;
+    border: 1px solid rgba(130, 255, 159, 0.5);
+    color: rgba(130, 255, 159, 1);
 }

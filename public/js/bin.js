@@ -29,25 +29,28 @@ async function render(layout){
     toolbar.innerHTML = `
         </div>
             <input type="text" onchange="editName(this.value)" id="binname" name="binname" value="${layout.name}">
-            <span id="info1">
-                <strong>ID:</strong> ${layout.id}<br>
-                <strong>Last edit:</strong> ${dateStr}<br>
-
+            <span id="info"></span>
+            <span id="info"></span>
+            <span id="info"></span>
+            <span id="info">
+                <button onclick="saveEdits()" class="">
+                    Save
+                </button>
+                <br>
+                <button onclick="$('.box-edit-controls').toggle();"class="">
+                    Edit
+                </button>
+            </span>
+            <span id="info">
                 <label for="bincol">Cols:</label>
                 <input type="number" onchange="editDim(this.value, ${layout.row})" id="bincol" name="bincol" min="2" max="16" value="${layout.col}">
                 <label for="binrow">, Rows:</label>
                 <input type="number" onchange="editDim(${layout.col},this.value)" id="binrow" name="binrow" min="2" max="10" value="${layout.row}">
             </span>
-            <span id="info1"></span>
-            <div id=buttons>
-            <button id="save-button" type="button" onclick="saveEdits()" class="barbutton btn btn-default btn-lg">
-                <i class="bi bi-device-hdd"></i>
-            </button>
-            <button type="button" onclick="$('.box-edit-controls').toggle();"class="barbutton btn btn-default btn-lg">
-                <i class="bi bi-pencil">  </i>
-            </button>
-
-            
+            <span id="info">
+                <strong>ID:</strong> ${layout.id}<br>
+                <strong>Last edit:</strong> ${dateStr}<br>
+            </span>
         </div>
     `;
     c.appendChild(toolbar);
