@@ -208,6 +208,10 @@ e_app.get('/', (req, res) => {
   }
   
 });
+e_app.get('/disabled', (req, res) => {
+  res.render("disabled",{
+  })
+});
 e_app.get('/test', (req, res) => {
   res.render("test",{
   })
@@ -228,51 +232,61 @@ e_app.post('/login', function(req, res, next) {
   failureRedirect: '/'
 }));
 e_app.post('/register', urlencodedParser, async function(req, res) {
-  console.info("REQUESTED REGISTER")
-  const username = req.body.username;
-  const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
-
-  // Check if username already exists
-  // Check if user exists in database
-  const userId = await db.has("user.default");
-  if (!userId) {
-    // Create default user if it doesn't exist
-    const newUser = {
-      name: "default",
-      password: "password123",
-      id: 1
-    };
-    await db.set("user.default", newUser);
-  }
-
-  // Retrieve user from database
-  const users = await db.get("user");
-  const userExists = Object.values(users).find(u => u.username === username);
-  if (userExists) {
-    return res.send('Username already taken');
-  }
-
-  // Check if password and confirm password match
-  if (password !== confirmPassword) {
-    return res.send('Passwords do not match');
-  }
-
-  // Create new user object
-  const newUserId = makeid(10)
-  const newUser = {
-    name: username,
-    password: password,
-    bins: [],
-    favorites: [],
-    id: newUserId
-  };
+  console.info("REQUESTED REGISTER");
+  if (process.env.ALLOW_REGISTER == "true"){
+    const username = req.body.username;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
   
-  await db.set("user." + newUserId, newUser);
-  console.info("REGISTERING USER")
-
-  // Redirect to login page
-  res.redirect('/');
+    // Check if username already exists
+    // Check if user exists in database
+    const userId = await db.has("user.default");
+    if (!userId) {
+      // Create default user if it doesn't exist
+      const newUser = {
+        name: "default",
+        password: "password123",
+        id: 1
+      };
+      await db.set("user.default", newUser);
+    }
+  
+    // Retrieve user from database
+    const users = await db.get("user");
+    const userExists = Object.values(users).find(u => u.username === username);
+    if (userExists) {
+      return res.send('Username already taken');
+    }
+  
+    // Check if password and confirm password match
+    if (password !== confirmPassword) {
+      return res.send('Passwords do not match');
+    }
+  
+    // Create new user object
+    const newUserId = makeid(10)
+    const newUser = {
+      name: username,
+      password: password,
+      bins: [],
+      favorites: [],
+      id: newUserId
+    };
+    
+    await db.set("user." + newUserId, newUser);
+    console.info("REGISTERING USER")
+  
+    // Redirect to login page
+    res.redirect('/');
+  }
+  else if(process.env.ALLOW_REGISTER == "false"){
+    console.log("register denied")
+    res.redirect("/disabled")
+  }
+  else{
+    console.error("INTERNAL ERROR");
+  }
+  
 });
 
 // SUB PAGES

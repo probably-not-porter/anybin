@@ -1,6 +1,13 @@
 # Anybin
 User > Bin > Item
 
+## ENV
+```
+PORT=4601
+ALLOW_REGISTER=false
+```
+
+
 ## User
 Name
 ID
