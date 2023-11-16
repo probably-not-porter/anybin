@@ -7,9 +7,7 @@
  #+#     #+# #+#   #+#+#    #+#    #+#    #+#    #+#     #+#   #+#+#      
 ###     ### ###    ####    ###    ######### ########### ###    ####       
 ```
-<img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white" />
-<img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" />
-<img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" />
+<img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white" /><img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" /><img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" />
 
 A self-hosted general organization platform. Created for the sake of organizing things in tackle boxes and binders, and keeping a photo record of things with notes attached. Pages have adjustable sizes, and grid allows for tetris-like shapes. 
 
