@@ -10,7 +10,7 @@
     width: 100%;
     height: auto;
 }
-@media (min-width: 575.98px) { 
+@media (min-width: 0px) { 
     .wrapper {
         grid-template-columns: 100%;
     }
