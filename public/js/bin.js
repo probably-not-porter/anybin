@@ -264,11 +264,8 @@ function editDim(col,row){
 }
 function editName(name){
     if (name != ""){
-        console.log("local edit bin name to " + name);
-
         CURRENT_BIN.name = name;
-        UNSAVED = true;
-        // update interface
+        saveEdits();
         render(CURRENT_BIN);
     }
     
