@@ -1,3 +1,6 @@
+*:focus {
+    outline: none;
+}
 #page-content{
     padding: 0 !important;
     margin: 0;
@@ -6,23 +9,37 @@
 }
 #toolbar{
     width: 100%;
-    height: 80px;
+    height: 50px;
     background-color: rgba(33,37,41,1);
     float: left;
     box-shadow: inset 14px 0 18px -14px rgba(0,0,0,0.4);
     position:relative;
     color: rgba(255,255,255,0.8);
-    font-size: 40px;
-    padding-left: 30px;
+    font-size: 20px;
+    line-height: 40px;
+    padding-left: 20px;
 }
 #itemname{
     background: none;
     border: 1px solid rgba(0,0,0,0);
-    line-height: 80px;
-    margin-left: 0px;
+    font-size: 20px;
+    line-height: 40px;
+    margin-top: 5px;
     max-width: 300px;
-    padding: 2px;
+    padding: 0px;
     color: rgba(255,255,255,0.8);
+}
+#itemname:hover{
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+}
+#itemname:focus{
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.8);
+}
+#itemname::selection{
+    border: none;
+}
+[contenteditable]:focus {
+    outline: 0px solid transparent;
 }
 #left_content{
     position: absolute;
