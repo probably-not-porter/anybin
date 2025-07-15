@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>anybin.home</title>
 
-        
+
         <link rel="stylesheet" href="css/bg.css" />
         <link rel="stylesheet" href="css/home.css" />
 
@@ -17,14 +17,14 @@
         <div class="bg bg2"></div>
         <div class="bg bg3"></div>
         <div id="banner">
-            <h1>Anybin v 0.1</h1>
-            <p>Organize it all, you magnificent son of a bitch.</p>
+            <h1>Anybin</h1>
         </div>
         <br><br><br>
         <div class="login-page">
             <div class="form">
                 <form class="register-form" method="POST" action="/register">
                     <input placeholder="Username" type="text" name="username">
+                    <input placeholder="Email" type="text" name="email">
                     <input placeholder="Password" type="password" name="password">
                     <input placeholder="Confirm Password"type="password" name="confirmPassword">
                     <br>
@@ -39,10 +39,26 @@
                     <p class="message">Not registered? <a href="#">Create an account</a></p>
                 </form>
             </div>
+
+        </div>
+        <div id="footer">
+            <p>
+                <strong><span id="version"></span></strong> | <a href='https://github.com/probably-not-porter/anybin'>Github</a>
+            </p>
         </div>
         <script>
             $('.message a').click(function(){
                 $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+            });
+            $.ajax({ // api request using built in user data
+                type: 'GET',
+                url: '/version',
+                success: function(result) {
+                    document.getElementById("version").innerText = `anybin-server-v${result}`;
+                },
+                error: function(xhr, status, err) {
+                    console.error('DATA: XHR Error.');
+                }
             });
         </script>
     </body>
